@@ -1,19 +1,7 @@
 # @pieda/core
 
-## 安裝步驟
-
-1. 在 package.json dependencies 加入套件
-
-```json
-"@pieda/core": "git+ssh://git@github.com:piedasing/-coder-core.git#v{版本號}",
-
-"@pieda/core": "file:coder-core-{版本號}.tgz",
-```
-
-2. 執行安裝指令
-
 ```bash
-npm install
+npm install @pieda/core
 ```
 
 ## 使用方式
@@ -21,10 +9,10 @@ npm install
 main.js or main.ts
 
 ```js
-import CoderLibrary, { createNotify } from '@pieda/core';
+import Core, { createNotify } from '@pieda/core';
 import '@pieda/core/style.css';
 
-app.use(CoderLibrary);
+app.use(Core);
 app.use(createNotify, {});
 ```
 
@@ -111,55 +99,59 @@ export const useApi = () => ({
 ```js
 import { useForm } from '@pieda/core';
 
-const { formData, $validate, $firstError, $hasError } = useForm({
-    data: {
+const { formData, $validate, $firstError, $hasError } = useForm(
+    {
         name: '',
         baby: {
             name: '',
             pic: '',
         },
     },
-    rules: (Validator) => ({
-        name(value) {
-            return Validator.value(value).required('此欄必填').minLength(3, '最少需填寫3個字元');
+    {
+        rules: (Validator) => ({
+            name(value) {
+                return Validator.value(value)
+                    .required('此欄必填')
+                    .minLength(3, '最少需填寫3個字元');
+            },
+            'baby.name'(value) {
+                return Validator.value(value).required('請輸入寶寶姓名');
+            },
+        }),
+        configs: {
+            /**
+             * 網頁要被滾動的元素選擇器，預設為 'html'，也可以帶 document.querySelector('html')
+             * @params {String | HTMLElement}
+             */
+            scrollElement: 'html',
+            /**
+             * 表單元素選擇器，預設為 'form'，也可以帶 document.querySelector('form')
+             * * @params {String | HTMLElement}
+             */
+            formElement: 'form',
+            /**
+             * 是否要自動滾動到驗證失敗的欄位，預設 true
+             * @params {Boolean}
+             */
+            focusInvalid: true,
+            /**
+             * 驗證失敗的表單控件自動加上的 class "名稱" (*** 前面沒有 . ***)，預設為 is-invalid
+             * @params {String}
+             */
+            invalidClass: 'is-invalid',
+            /**
+             * 錯誤訊息的元素選擇器，預設為 '.invalid-feedback'，也可以帶 document.querySelectorAll('.invalid-feedback')
+             * @params {String | NodeList}
+             */
+            errorElement: '.invalid-feedback',
+            /**
+             * 滾動至驗證失敗欄位時，賦予該元素搖晃的時間 (毫秒)，預設為 800 ms，如果帶 <= 0 則不會搖晃
+             * @params {Number}
+             */
+            shakeDuration: 800,
         },
-        'baby.name'(value) {
-            return Validator.value(value).required('請輸入寶寶姓名');
-        },
-    }),
-    configs: {
-        /**
-         * 網頁要被滾動的元素選擇器，預設為 'html'，也可以帶 document.querySelector('html')
-         * @params {String | HTMLElement}
-         */
-        scrollElement: 'html',
-        /**
-         * 表單元素選擇器，預設為 'form'，也可以帶 document.querySelector('form')
-         * * @params {String | HTMLElement}
-         */
-        formElement: 'form',
-        /**
-         * 是否要自動滾動到驗證失敗的欄位，預設 true
-         * @params {Boolean}
-         */
-        focusInvalid: true,
-        /**
-         * 驗證失敗的表單控件自動加上的 class "名稱" (*** 前面沒有 . ***)，預設為 is-invalid
-         * @params {String}
-         */
-        invalidClass: 'is-invalid',
-        /**
-         * 錯誤訊息的元素選擇器，預設為 '.invalid-feedback'，也可以帶 document.querySelectorAll('.invalid-feedback')
-         * @params {String | NodeList}
-         */
-        errorElement: '.invalid-feedback',
-        /**
-         * 滾動至驗證失敗欄位時，賦予該元素搖晃的時間 (毫秒)，預設為 800 ms，如果帶 <= 0 則不會搖晃
-         * @params {Number}
-         */
-        shakeDuration: 800,
     },
-});
+);
 
 const onSubmit = async () => {
     const success = await $validate();

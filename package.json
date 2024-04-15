@@ -6,7 +6,15 @@
     "files": [
         "dist"
     ],
-    "repository": "git://github.com/piedasing/-pieda-core.git",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/piedasing/-pieda-core.git"
+    },
+    "author": "piedasing",
+    "license": "MIT",
+    "engines": {
+        "node": ">=18"
+    },
     "exports": {
         ".": {
             "import": {
