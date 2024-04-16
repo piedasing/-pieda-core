@@ -37,13 +37,13 @@ export default defineConfig({
         lib: {
             entry: path.resolve(__dirname, 'src/library.ts'),
             name: '@pieda/core',
-            fileName: (format, entry) => `core.${entry}.${format}.js`,
+            fileName: (format, entry) => `core.${format}.js`,
             formats: ['es'],
         },
         rollupOptions: {
             external: ['vue', 'sweetalert2', 'pinia', 'axios'],
             output: {
-                format: 'umd',
+                format: 'es',
                 name: 'CoderLibrary',
                 globals: {
                     vue: 'Vue',
