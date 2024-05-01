@@ -1,29 +1,34 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 const data = [
     {
-        loader: 'LoaderEllipsis',
-        sizes: ['40px', '80px', '120px'],
+        loader: 'core-loader-ellipsis',
+        sizes: ['20px', '40px', '60px'],
     },
     {
-        loader: 'LoaderSpinner',
-        sizes: ['40px', '80px', '120px'],
+        loader: 'core-loader-spinner',
+        sizes: ['20px', '40px', '60px'],
     },
     {
-        loader: 'LoaderRing',
-        sizes: ['40px', '80px', '120px'],
+        loader: 'core-loader-ring',
+        sizes: ['20px', '40px', '60px'],
     },
     {
-        loader: 'LoaderGrid',
-        sizes: ['40px', '80px', '120px'],
+        loader: 'core-loader-grid',
+        sizes: ['20px', '40px', '60px'],
     },
     {
-        loader: 'LoaderHourglass',
-        sizes: ['40px', '80px', '120px'],
+        loader: 'core-loader-hourglass',
+        sizes: ['20px', '40px', '60px'],
     },
 ];
+
+const color = ref('#0096ff');
 </script>
 
 <template>
+    <input type="color" v-model="color" />
     <div class="cc-flex cc-flex-wrap cc-gap-4">
         <template v-for="item in data">
             <div class="cc-flex-none cc-mb-4">
@@ -31,20 +36,22 @@ const data = [
                     <component
                         :is="item.loader"
                         :size="size"
-                        class="cc-border-2 cc-border-primary cc-border-solid cc-mx-1"
+                        :color="color"
+                        class="cc-border-2 cc-border-dotted cc-border-primary/30 cc-mx-1"
                     ></component>
                 </template>
             </div>
         </template>
     </div>
     <!--  -->
-    <div class="cc-flex cc-flex-wrap cc-gap-3">
+    <div class="cc-flex cc-flex-wrap cc-gap-4">
         <template v-for="item in data">
             <button
-                class="cc-text-[20px] cc-bg-primary cc-text-white cc-border-none cc-rounded-[24px] cc-px-6 cc-py-2"
+                class="cc-bg-white cc-border-2 cc-border-solid cc-rounded-[24px] cc-px-8 cc-py-2"
+                :style="{ color, 'border-color': color }"
             >
                 按鈕的文字
-                <component :is="item.loader" :color="'#fff'" :size="20"></component>
+                <component :is="item.loader" :color="color" :size="16"></component>
             </button>
         </template>
     </div>

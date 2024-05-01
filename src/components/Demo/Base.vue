@@ -14,8 +14,7 @@ watch(
 </script>
 
 <template>
-    <div>{{ ww }}x{{ wh }}</div>
+    <div>window size: {{ ww }}x{{ wh }}</div>
 </template>
 
 <style lang="scss" scoped></style>
-@/library

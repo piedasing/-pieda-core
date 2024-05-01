@@ -9,11 +9,14 @@ npm install @pieda/core
 main.js or main.ts
 
 ```js
-import Core, { createNotify } from '@pieda/core';
+import { createCore } from '@pieda/core';
 import '@pieda/core/style.css';
 
-app.use(Core);
-app.use(createNotify, {});
+app.use(
+    createCore({
+        prefix: 'core',
+    }),
+);
 ```
 
 ### useBase
@@ -75,8 +78,8 @@ $ajax.init({
      * 失敗: [error, null]
      */
     interceptors: {
-        success: (response) => {},
-        failure: (response) => {},
+        success: (response, defaultInterceptors) => {},
+        failure: (response, defaultInterceptors) => {},
     },
 });
 ```
@@ -84,7 +87,7 @@ $ajax.init({
 ### api.js
 
 ```js
-export const useApi = () => ({
+export const useApi = ({ $ajax }) => ({
     getList: () => {
         return $ajax.get('/list');
     },
@@ -119,6 +122,7 @@ const { formData, $validate, $firstError, $hasError } = useForm(
             },
         }),
         configs: {
+            debug: false,
             /**
              * 網頁要被滾動的元素選擇器，預設為 'html'，也可以帶 document.querySelector('html')
              * @params {String | HTMLElement}
@@ -165,9 +169,39 @@ const onSubmit = async () => {
 ## Loaders
 
 ```html
-<loader-ellipsis :size="'40px'" :color="'#0096ff'"></loader-ellipsis>
-<loader-grid :size="'40px'" :color="'#0096ff'"></loader-grid>
-<loader-hourglass :size="'40px'" :color="'#0096ff'"></loader-hourglass>
-<loader-ring :size="'40px'" :color="'#0096ff'"></loader-ring>
-<loader-spinner :size="'40px'" :color="'#0096ff'"></loader-spinner>
+<core-loader-ellipsis :size="'40px'" :color="'#0096ff'"></core-loader-ellipsis>
+<core-loader-grid :size="'40px'" :color="'#0096ff'"></core-loader-grid>
+<core-loader-hourglass :size="'40px'" :color="'#0096ff'"></core-loader-hourglass>
+<core-loader-ring :size="'40px'" :color="'#0096ff'"></core-loader-ring>
+<core-loader-spinner :size="'40px'" :color="'#0096ff'"></core-loader-spinner>
+```
+
+## v-loading
+
+```html
+<script setup>
+    import { ref } from 'vue';
+
+    const isLoading = ref(false);
+</script>
+
+<!-- 布林 -->
+<div v-loading="isLoading">...</div>
+<!-- 物件 -->
+<div
+    v-loading="{
+        show: isLoading,
+        isFullPage: false,
+        loader: {
+            type: 'spinner',
+            color: '#0096ff',
+            size: 50,
+        },
+        overlay: {
+            color: 'rgba(255, 255, 255, 0.8)'
+        }
+    }"
+>
+    ...
+</div>
 ```

@@ -25,6 +25,7 @@ const onTestDialog = () => {
         title: '系統通知',
         message: '測試',
         variant: 'error',
+        showCancelButton: true,
     });
 };
 
@@ -40,4 +41,3 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped></style>
-@/library

@@ -79,33 +79,34 @@ const onSubmit = async () => {
 </script>
 
 <template>
-    <form @submit.prevent="onSubmit">
-        <div class="">
+    <form class="form" @submit.prevent="onSubmit">
+        <div class="form__item">
             <input type="text" name="name" v-model="formData.name" placeholder="請輸入名字" />
             <p class="invalid-feedback" v-if="$hasError('formData.name')">
                 {{ $firstError('formData.name') }}
             </p>
         </div>
-        <div class="">
+        <div class="form__item">
             <input type="text" name="mobile" v-model="formData.mobile" placeholder="請輸入手機" />
             <input type="checkbox" v-model="formData.show_mobile" />
             <p class="invalid-feedback" v-if="$hasError('formData.mobile')">
                 {{ $firstError('formData.mobile') }}
             </p>
         </div>
-        <div class="">
+        <div class="form__item">
             <input type="text" name="url" v-model="formData.url" placeholder="請輸入網址" />
             <p class="invalid-feedback" v-if="$hasError('formData.url')">
                 {{ $firstError('formData.url') }}
             </p>
         </div>
-        <div class="">
+        <div class="form__item">
             <input
                 type="text"
                 v-model="formData.min_money"
                 placeholder="請輸入最低金額"
                 @input="() => $validate('formData.max_money')"
             />
+            ~
             <input
                 type="text"
                 v-model="formData.max_money"
@@ -119,21 +120,33 @@ const onSubmit = async () => {
                 {{ $firstError('formData.max_money') }}
             </p>
         </div>
-        <div class="">
+        <div class="form__item">
             <input type="text" v-model="formData.baby.name" placeholder="請輸入寶寶姓名" />
             <p class="invalid-feedback" v-if="$hasError('formData.baby.name')">
                 {{ $firstError('formData.baby.name') }}
             </p>
         </div>
-        <div class="">
+        <div class="form__item">
             <input type="text" v-model="formData.baby.age" placeholder="請輸入寶寶年紀" />
             <p class="invalid-feedback" v-if="$hasError('formData.baby.age')">
                 {{ $firstError('formData.baby.age') }}
             </p>
         </div>
-        <button type="submit">送出</button>
+        <button class="cc-mt-10" type="submit">送出</button>
     </form>
-    <div class="cc-h-screen"></div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form {
+    height: 120vh;
+    .form__item {
+        margin-bottom: 0.5rem;
+    }
+    .invalid-feedback {
+        font-size: 12px;
+        color: #f1341c;
+        margin-top: 4px;
+        margin-bottom: 0;
+    }
+}
+</style>
