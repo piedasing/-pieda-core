@@ -2,32 +2,28 @@
 import { ref, onMounted } from 'vue';
 
 import * as Demo from '@/components/Demo';
+import Tab from '@/components/Tab.vue';
 
-import { useNotify, useAjax } from '@/library';
+import { useAjax } from '@/library';
 
-const $notify = useNotify();
 const $ajax = useAjax();
 
-const isLiffLoaded = ref(false);
+const { isLoading } = $ajax;
+
+const tab = ref('useBase');
+const tabItems = [
+    { label: 'useBase', value: 'useBase' },
+    { label: 'useNotify', value: 'useNotify' },
+    { label: 'useAjax', value: 'useAjax' },
+    { label: 'useForm', value: 'useForm' },
+    { label: 'Loader', value: 'Loader' },
+    { label: 'v-loading', value: 'v-loading' },
+];
 
 const initApp = () => {
-    const inputAlert = $notify.custom('inputAlert', {
-        iconColor: '#999',
-        input: 'tel',
-    });
-    inputAlert.fire({ title: 'title', message: 'message', variant: 'info', iconColor: '#0096ff' });
-
-    const accessToken = 'TEST_TOKEN';
-    // 設定 axios
     $ajax.init({
         baseURL: '',
-        proxyPath: '/proxy-api',
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
     });
-
-    isLiffLoaded.value = true;
 };
 
 onMounted(() => {
@@ -36,18 +32,30 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="">
-        <Demo.Base></Demo.Base>
-        <hr />
-        <Demo.Notify></Demo.Notify>
-        <hr />
-        <Demo.Ajax></Demo.Ajax>
-        <hr />
-        <Demo.Loader></Demo.Loader>
-        <hr />
-        <Demo.Form></Demo.Form>
+    <div class="" v-loading="isLoading">
+        <Tab v-model:value="tab" :options="tabItems">
+            <template v-slot:default>
+                <template v-if="tab === 'useBase'">
+                    <Demo.Base></Demo.Base>
+                </template>
+                <template v-else-if="tab === 'useNotify'">
+                    <Demo.Notify></Demo.Notify>
+                </template>
+                <template v-else-if="tab === 'useAjax'">
+                    <Demo.Ajax></Demo.Ajax>
+                </template>
+                <template v-else-if="tab === 'useForm'">
+                    <Demo.Form></Demo.Form>
+                </template>
+                <template v-else-if="tab === 'Loader'">
+                    <Demo.Loader></Demo.Loader>
+                </template>
+                <template v-else-if="tab === 'v-loading'">
+                    <Demo.Loading></Demo.Loading>
+                </template>
+            </template>
+        </Tab>
     </div>
 </template>
 
 <style lang="scss" scoped></style>
-@/library

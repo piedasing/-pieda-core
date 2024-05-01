@@ -1,1 +1,8 @@
-@import '@/assets/scss/tailwindcss/index.scss';
+@import './utils/_variables.scss';
+@import './utils/_mixins.scss';
+
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './_loading.scss';

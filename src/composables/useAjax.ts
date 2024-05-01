@@ -9,8 +9,20 @@ declare namespace NAjax {
             [x: string]: string;
         };
         interceptors?: {
-            success?: (response: AxiosResponse) => [];
-            failure?: (error: any) => [];
+            success?: (response: AxiosResponse, interceptors?: typeof defaultInterceptors) => [];
+            failure?: (error: any, interceptors?: typeof defaultInterceptors) => [];
+        };
+    };
+
+    export type TAjaxResponse = AxiosResponse & {
+        config: {
+            customInterceptors?: {
+                success?: (
+                    response: AxiosResponse,
+                    interceptors?: typeof defaultInterceptors,
+                ) => {};
+                failure?: (error: any, interceptors?: typeof defaultInterceptors) => {};
+            };
         };
     };
 }
@@ -18,7 +30,36 @@ declare namespace NAjax {
 const axiosInstance = ref({} as AxiosInstance);
 const isLoading = ref(false);
 
+const defaultInterceptors = {
+    success: (response: NAjax.TAjaxResponse) => {
+        const success = response.data?.success || false;
+        if (
+            (typeof success === 'boolean' && !success) ||
+            (typeof success === 'string' && success !== 'true')
+        ) {
+            const err: any = new Error(response.data?.msg || '發生錯誤，請稍候再試');
+            err.code = response.data?.code || 400;
+            return [err, null] as any;
+        }
+
+        return [null, response.data?.data] as any;
+    },
+    failure: (error: any) => {
+        const err: any = new Error(error.message || '發生錯誤，請稍候再試');
+        err.code = 400;
+        return [err, null] as any;
+    },
+};
+
 export const useAjax = () => {
+    const instance = axiosInstance.value;
+
+    const setCommonHeaders = (headers: { [x: string]: string }) => {
+        Object.keys(headers).forEach((key) => {
+            instance.defaults.headers.common[key] = headers[key];
+        });
+    };
+
     return {
         isLoading,
         setLoading(show = false) {
@@ -32,57 +73,49 @@ export const useAjax = () => {
             });
 
             axiosInstance.value.interceptors.response.use(
-                (response) => {
+                (response: NAjax.TAjaxResponse) => {
+                    const { customInterceptors } = response.config;
+                    if (customInterceptors?.success) {
+                        return customInterceptors.success?.(response, defaultInterceptors) as any;
+                    }
                     if (interceptors?.success && typeof interceptors.success === 'function') {
-                        return interceptors.success(response) as any;
+                        return interceptors.success(response, defaultInterceptors) as any;
                     }
-
-                    const success = response.data?.success || false;
-                    if (
-                        (typeof success === 'boolean' && !success) ||
-                        (typeof success === 'string' && success !== 'true')
-                    ) {
-                        const err: any = new Error(response.data?.msg || '發生錯誤，請稍候再試');
-                        err.code = response.data?.code || 400;
-                        return [err, null] as any;
-                    }
-
-                    return [null, response.data?.data] as any;
+                    defaultInterceptors.success(response);
                 },
-                (error) => {
-                    if (interceptors?.failure && typeof interceptors.failure === 'function') {
-                        return interceptors.failure(error) as any;
+                (error: any) => {
+                    const { customInterceptors } = error.config;
+                    if (customInterceptors?.failure) {
+                        return customInterceptors.failure?.(error, defaultInterceptors) as any;
                     }
-                    const err: any = new Error(error.message || '發生錯誤，請稍候再試');
-                    err.code = 400;
-                    return [err, null] as any;
+                    if (interceptors?.failure && typeof interceptors.failure === 'function') {
+                        return interceptors.failure(error, defaultInterceptors) as any;
+                    }
+                    defaultInterceptors.failure(error);
                 },
             );
         },
-        setAuth(accessToken: string, authHeaderName = 'Authorization') {
-            const instance = axiosInstance.value;
-            instance.defaults.headers.common[authHeaderName] = accessToken;
+        setCommonHeaders,
+        setAuth(accessToken: string, headerName = 'Authorization') {
+            setCommonHeaders({
+                [headerName]: accessToken,
+            });
         },
         //
         get(url = '', options?: AxiosRequestConfig) {
-            const instance = axiosInstance.value;
             return instance.get(url, options) as Promise<[any, any]>;
         },
-        post(url = '', options?: AxiosRequestConfig) {
-            const instance = axiosInstance.value;
-            return instance.post(url, options) as Promise<[any, any]>;
+        post(url = '', data: any, options?: AxiosRequestConfig) {
+            return instance.post(url, data, options) as Promise<[any, any]>;
         },
-        put(url = '', options?: AxiosRequestConfig) {
-            const instance = axiosInstance.value;
-            return instance.put(url, options) as Promise<[any, any]>;
+        put(url = '', data: any, options?: AxiosRequestConfig) {
+            return instance.put(url, data, options) as Promise<[any, any]>;
+        },
+        patch(url = '', data: any, options?: AxiosRequestConfig) {
+            return instance.patch(url, data, options) as Promise<[any, any]>;
         },
         delete(url = '', options?: AxiosRequestConfig) {
-            const instance = axiosInstance.value;
             return instance.delete(url, options) as Promise<[any, any]>;
-        },
-        patch(url = '', options?: AxiosRequestConfig) {
-            const instance = axiosInstance.value;
-            return instance.patch(url, options) as Promise<[any, any]>;
         },
     };
 };
