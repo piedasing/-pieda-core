@@ -1,12 +1,12 @@
 # @pieda/core
 
+## 安裝
+
 ```bash
 npm install @pieda/core
 ```
 
-## 使用方式
-
-main.js or main.ts
+## 使用
 
 ```js
 import { createCore } from '@pieda/core';
@@ -15,6 +15,9 @@ import '@pieda/core/style.css';
 app.use(
     createCore({
         prefix: 'core',
+        notify: {
+            confirmButtonColor: '#0096ff',
+        },
     }),
 );
 ```
@@ -42,12 +45,27 @@ $notify.setGlobalConfigs({
 });
 ```
 
-### 其他元件呼叫 Notify
+### 呼叫 Notify
 
 ```js
+// alert
 $notify.alert({
     title: '系統通知',
     message: '訊息內容',
+    variant: 'success',
+});
+
+// confirm
+$notify.alert({
+    title: '系統通知',
+    message: '訊息內容',
+    variant: 'question',
+    confirm: true,
+});
+
+// toast
+$notify.toast({
+    title: '訊息內容',
     variant: 'success',
 });
 ```
