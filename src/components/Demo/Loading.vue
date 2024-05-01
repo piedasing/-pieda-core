@@ -10,12 +10,12 @@ const toggleLoading = () => {
 
 <template>
     <div class="demo-loading cc-py-4">
-        <buttion
+        <button
             class="cc-bg-primary cc-text-white cc-border-none cc-rounded-[24px] cc-px-6 cc-py-2 cc-cursor-pointer"
             @click="toggleLoading"
         >
             切換讀取狀態
-        </buttion>
+        </button>
 
         <div class="cc-flex cc-gap-x-2 cc-py-4">
             <div class="cc-flex-1 cc-h-[200px]" v-loading="isLoading">

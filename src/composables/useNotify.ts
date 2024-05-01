@@ -1,4 +1,4 @@
-import { createApp, ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import Swal, { SweetAlertOptions, SweetAlertIcon, SweetAlertResult } from 'sweetalert2';
 
 namespace NNotify {
@@ -11,13 +11,14 @@ namespace NNotify {
     } & SweetAlertOptions;
 
     export type TAlert = {
-        title: string;
+        title?: string;
         message: string;
-        variant?: SweetAlertIcon | '';
+        variant?: SweetAlertIcon | undefined;
+        confirm?: boolean;
     } & SweetAlertOptions;
 }
 
-const getIcon = (variant: string): SweetAlertIcon | undefined => {
+const getIcon = (variant?: string): SweetAlertIcon | undefined => {
     if (!variant) {
         return undefined;
     }
@@ -31,8 +32,22 @@ const getIcon = (variant: string): SweetAlertIcon | undefined => {
     return variants?.[variant] || undefined;
 };
 
+const getIconColor = (variant?: string): string | undefined => {
+    if (!variant) {
+        return undefined;
+    }
+    const variants: { [x: string]: string } = {
+        success: '#a5dc86',
+        info: '#3fc3ee',
+        warning: '#f8bb86',
+        question: '#87adbd',
+        error: '#f27474',
+    };
+    return variants?.[variant] || undefined;
+};
+
 const defaultConfigs: Ref<Partial<SweetAlertOptions>> = ref({
-    iconColor: '#7066E0',
+    title: '系統通知',
     confirmButtonColor: '#7066E0',
     denyButtonColor: '#DC3741',
     cancelButtonColor: '#6E7881',
@@ -43,37 +58,31 @@ const defaultConfigs: Ref<Partial<SweetAlertOptions>> = ref({
     allowEscapeKey: false,
 });
 
-const dialogs: Ref<{ [x: string]: SweetAlertOptions }> = ref({});
+const setGlobalConfigs = (configs?: Partial<SweetAlertOptions>) => {
+    if (!configs) {
+        return;
+    }
+    defaultConfigs.value = {
+        ...defaultConfigs.value,
+        ...configs,
+    };
+};
 
-export const createNotify = {
-    install(app: ReturnType<typeof createApp>, options?: { [x: string]: any }) {
-        if (options?.configs) {
-            defaultConfigs.value = {
-                ...defaultConfigs.value,
-                ...options.configs,
-            };
-        }
-        if (options?.configs) {
-            dialogs.value = {
-                ...dialogs.value,
-                ...options.dialogs,
-            };
-        }
-    },
+export const createNotify = (configs?: Partial<SweetAlertOptions>) => {
+    setGlobalConfigs(configs);
 };
 
 export const useNotify = () => {
     return {
-        setGlobalConfigs(configs: Partial<SweetAlertOptions>) {
-            defaultConfigs.value = {
-                ...defaultConfigs.value,
-                ...configs,
-            };
-        },
+        setGlobalConfigs,
         fire(configs: Partial<SweetAlertOptions>): Promise<SweetAlertResult<any>> {
             return Swal.fire({
                 ...defaultConfigs.value,
                 ...configs,
+                title:
+                    typeof configs.title !== 'undefined'
+                        ? configs.title
+                        : defaultConfigs.value.title,
             });
         },
         toast({
@@ -95,61 +104,41 @@ export const useNotify = () => {
                     toast.addEventListener('mouseenter', Swal.stopTimer);
                     toast.addEventListener('mouseleave', Swal.resumeTimer);
                 },
+                willClose: (toast) => {
+                    toast.removeEventListener('mouseenter', Swal.stopTimer);
+                    toast.removeEventListener('mouseleave', Swal.resumeTimer);
+                },
                 ...configs,
             });
 
             return SwalTemplate.fire({
                 title,
                 icon: getIcon(variant),
+                iconColor: configs.iconColor || getIconColor(variant) || undefined,
             });
         },
         alert({
-            title = '',
+            title = undefined,
             message = '',
-            variant = '',
+            variant = undefined,
+            confirm = false,
             ...configs
         }: NNotify.TAlert): Promise<SweetAlertResult<any>> {
             const SwalTemplate = Swal.mixin({
                 ...defaultConfigs.value,
                 showConfirmButton: true,
-                showCancelButton: false,
+                showCancelButton: confirm ? true : false,
                 showCloseButton: true,
                 confirmButtonText: '確認',
+                cancelButtonText: '取消',
                 ...configs,
             });
-
             return SwalTemplate.fire({
-                title,
+                title: typeof title !== 'undefined' ? title : defaultConfigs.value.title,
                 html: message?.replace(/\n/g, '<br>') || message,
                 icon: getIcon(variant),
+                iconColor: configs.iconColor || getIconColor(variant),
             });
-        },
-        custom(name: string, configs: Partial<SweetAlertOptions>) {
-            dialogs.value[name] = Object.assign({}, configs);
-
-            return {
-                fire: ({
-                    title = '',
-                    message = '',
-                    variant = '',
-                    ...configs
-                }: NNotify.TAlert): Promise<SweetAlertResult<any>> => {
-                    const dialogConfigs = dialogs.value?.[name];
-                    if (!dialogConfigs) {
-                        throw new Error(`The dialog named '${name}' is not found.`);
-                    }
-                    const SwalTemplate = Swal.mixin({
-                        ...defaultConfigs.value,
-                        ...dialogConfigs,
-                        ...configs,
-                    });
-                    return SwalTemplate.fire({
-                        title,
-                        html: message?.replace(/\n/g, '<br>') || message,
-                        icon: getIcon(variant),
-                    });
-                },
-            };
         },
     };
 };

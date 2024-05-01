@@ -23,7 +23,7 @@ export const useBase = () => {
         ww,
         wh,
         isMobile: computed(() => {
-            return deviceInfo?.isMobile || ww.value < 1024 ? true : false;
+            return deviceInfo?.isMobile ? true : false;
         }),
         deviceInfo,
     };
