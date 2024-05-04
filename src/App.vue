@@ -18,6 +18,7 @@ const tabItems = [
     { label: 'useForm', value: 'useForm' },
     { label: 'Loader', value: 'Loader' },
     { label: 'v-loading', value: 'v-loading' },
+    { label: 'useModal', value: 'useModal' },
 ];
 
 const initApp = () => {
@@ -52,6 +53,9 @@ onMounted(() => {
                 </template>
                 <template v-else-if="tab === 'v-loading'">
                     <Demo.Loading></Demo.Loading>
+                </template>
+                <template v-else-if="tab === 'useModal'">
+                    <Demo.Modal></Demo.Modal>
                 </template>
             </template>
         </Tab>
