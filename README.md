@@ -223,3 +223,65 @@ const onSubmit = async () => {
     ...
 </div>
 ```
+
+## useModal
+
+一般元件
+
+```html
+<core-base-modal v-model:show="showModal" :showCloseBtn="true">
+    <template v-slot:modal-header>modal header</template>
+    <template v-slot:modal-body>modal body</template>
+    <template v-slot:modal-footer>modal footer</template>
+</core-base-modal>
+
+<core-base-modal v-model:show="modal.show">
+    <Modals.SampleModal
+        :title="'Modal'"
+        @confirm="modal.onConfirm"
+        @cancel="modal.onCancel"
+        @close="modal.onClose"
+    ></Modals.SampleModal>
+</core-base-modal>
+```
+
+動態元件
+
+```js
+import { useModal } from '@pieda/core';
+
+import SampleModal from 'path/to/SampleModal.vue';
+
+const $modal = useModal({
+    styles: {
+        modal: {
+            '--bm-overlay-color': 'rgba(120,120,120,0.8)',
+            '--bm-close-btn-size': '36px',
+        },
+    },
+    zIndex: 1000,
+    overlay: {
+        show: true,
+        clickable: true,
+    },
+    showCloseBtn: false,
+    component: SampleModal,
+    props: {
+        title: 'Dynamic Modal',
+        onClose: async () => {
+            console.log('close');
+            $modal.close();
+        },
+        onConfirm: () => {
+            console.log('confirm');
+            $modal.close();
+        },
+        onCancel: async () => {
+            console.log('cancel');
+            $modal.close();
+        },
+    },
+});
+
+$modal.open();
+```

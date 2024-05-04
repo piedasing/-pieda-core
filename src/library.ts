@@ -15,4 +15,8 @@ export const createCore = (app: ReturnType<typeof createApp>, configs?: TConfigs
     app.use(plugins, configs);
 };
 
-export { useBase, useAjax, useForm, useNotify, createNotify } from './composables';
+export { useBase } from './composables';
+export { useAjax } from './composables';
+export { useForm } from './composables';
+export { useNotify, createNotify } from './composables';
+export { useModal } from './composables';

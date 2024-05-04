@@ -4,6 +4,7 @@ import Ajax from './Ajax.vue';
 import Form from './Form.vue';
 import Loader from './Loader.vue';
 import Loading from './Loading.vue';
+import Modal from './Modal.vue';
 
 export {
     //
@@ -13,4 +14,5 @@ export {
     Form,
     Loader,
     Loading,
+    Modal,
 };

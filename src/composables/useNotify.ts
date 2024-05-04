@@ -1,4 +1,4 @@
-import { ref, Ref } from 'vue';
+import { ref, Ref, createApp } from 'vue';
 import Swal, { SweetAlertOptions, SweetAlertIcon, SweetAlertResult } from 'sweetalert2';
 
 namespace NNotify {
@@ -68,7 +68,10 @@ const setGlobalConfigs = (configs?: Partial<SweetAlertOptions>) => {
     };
 };
 
-export const createNotify = (configs?: Partial<SweetAlertOptions>) => {
+export const createNotify = (
+    app: ReturnType<typeof createApp>,
+    configs?: Partial<SweetAlertOptions>,
+) => {
     setGlobalConfigs(configs);
 };
 
