@@ -1,5 +1,16 @@
+<script setup>
+import { useForm } from '@/library';
+import Form from '@/components/Demo/Form.vue'
+
+</script>
+
+# useForm
+
+::: code-group
+
+```md [Form.vue]
 <script setup lang="ts">
-import { useForm } from '@/composables';
+import { useForm } from '@pieda/core';
 
 const { formData, $validate, $firstError, $hasError } = useForm(
     {
@@ -71,7 +82,6 @@ const { formData, $validate, $firstError, $hasError } = useForm(
 
 const onSubmit = async () => {
     const success = await $validate();
-    console.log(success);
     if (!success) {
         return;
     }
@@ -136,30 +146,8 @@ const onSubmit = async () => {
         <button class="btn__submit" type="submit">送出</button>
     </form>
 </template>
+```
 
-<style lang="scss" scoped>
-.form {
-    padding: 4rem 1rem;
-    .form__item {
-        margin-bottom: 0.5rem;
-    }
-    input {
-        border: 1px solid #999;
-        padding: 4px 12px;
-        font-size: 16px;
-    }
-    .invalid-feedback {
-        font-size: 12px;
-        color: #f1341c;
-        margin-top: 4px;
-        margin-bottom: 0;
-    }
-    .btn__submit {
-        background-color: #0096ff;
-        color: #fff;
-        margin-top: 1rem;
-        padding: 0.25rem 1rem;
-        border-radius: 4px;
-    }
-}
-</style>
+:::
+
+<Form></Form>

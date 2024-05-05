@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 
 import { useModal, useNotify } from '@/library';
 
+import BaseModal from '@/components/BaseModal.vue';
 import * as Modals from '@/components/Modals';
 
 const $notify = useNotify();
@@ -102,26 +103,34 @@ const onToggleGlobalModal = () => {
 </script>
 
 <template>
-    <div class="cc-flex cc-gap-4">
-        <button class="" @click="onToggleModal1">open modal1</button>
-        <button class="" @click="onToggleModal2">open modal2</button>
-        <button class="" @click="onToggleGlobalModal">open dynamic renderred modal</button>
+    <div class="">
+        <button class="" @click="onToggleModal1">modal (具名 slot)</button>
+        <button class="" @click="onToggleModal2">modal (預設 slot)</button>
+        <button class="" @click="onToggleGlobalModal">modal (js 動態渲染)</button>
     </div>
 
-    <core-base-modal v-model:show="showModal" :showCloseBtn="true">
+    <BaseModal v-model:show="showModal" :showCloseBtn="true">
         <template v-slot:modal-header>modal header</template>
         <template v-slot:modal-body>modal body</template>
         <template v-slot:modal-footer>modal footer</template>
-    </core-base-modal>
+    </BaseModal>
 
-    <core-base-modal v-model:show="modal.show">
+    <BaseModal v-model:show="modal.show">
         <Modals.SampleModal
             :title="'Modal'"
             @confirm="modal.onConfirm"
             @cancel="modal.onCancel"
             @close="modal.onClose"
         ></Modals.SampleModal>
-    </core-base-modal>
+    </BaseModal>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+button {
+    background-color: #0096ff;
+    color: #fff;
+    margin-right: 1rem;
+    padding: 0.25rem 1rem;
+    border-radius: 4px;
+}
+</style>

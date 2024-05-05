@@ -1,0 +1,13 @@
+.form-animate-shake {
+    animation: form-shake 0.2s linear infinite;
+}
+
+@keyframes form-shake {
+    0%,
+    100% {
+        transform: translateX(4px);
+    }
+    50% {
+        transform: translateX(0px);
+    }
+}
