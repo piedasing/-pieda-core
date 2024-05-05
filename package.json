@@ -6,6 +6,7 @@
     "files": [
         "dist"
     ],
+    "homepage": "https://piedasing.github.io/-pieda-core/",
     "repository": {
         "type": "git",
         "url": "https://github.com/piedasing/-pieda-core.git"
