@@ -5,7 +5,7 @@ const $notify = useNotify();
 
 const onTestToast = () => {
     $notify.toast({
-        title: '通知通知通知通知通知通知通知通知通知通知通知通知通知通知通知通知通知通知',
+        title: '通知訊息',
         variant: 'success',
     });
 };
@@ -14,7 +14,7 @@ const onTestAlert = () => {
     $notify.alert({
         title: '',
         message: '測試',
-        variant: 'error',
+        variant: 'success',
     });
 };
 
@@ -28,9 +28,17 @@ const onTestConfirm = () => {
 </script>
 
 <template>
-    <button class="cc-px-6 cc-py-3" @click="onTestToast">toast</button>
-    <button class="cc-px-6 cc-py-3" @click="onTestAlert">alert</button>
-    <button class="cc-px-6 cc-py-3" @click="onTestConfirm">confirm</button>
+    <button @click="onTestToast">toast</button>
+    <button @click="onTestAlert">alert</button>
+    <button @click="onTestConfirm">confirm</button>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+button {
+    background-color: #0096ff;
+    color: #fff;
+    margin-right: 1rem;
+    padding: 0.25rem 1rem;
+    border-radius: 4px;
+}
+</style>

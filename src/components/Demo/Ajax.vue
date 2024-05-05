@@ -6,16 +6,9 @@ const $ajax = useAjax();
 const $api = useApi({ $ajax });
 const $notify = useNotify();
 
-const sleep = (delay = 1000) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(resolve, delay);
-    });
-};
-
-const onTest = async () => {
+const fetchSuccess = async () => {
     $ajax.setLoading(true);
-    const [error, res] = await $api.getList();
-    await sleep(1000);
+    const [error, res] = await $api.getTest();
     $ajax.setLoading(false);
     if (error) {
         $notify.alert({
@@ -31,10 +24,38 @@ const onTest = async () => {
         variant: 'success',
     });
 };
+
+const fetchError = async () => {
+    $ajax.setLoading(true);
+    const [error, res] = await $api.postTest({ id: 0 });
+    $ajax.setLoading(false);
+    if (error) {
+        $notify.alert({
+            title: '系統訊息',
+            message: error.message,
+            variant: 'error',
+        });
+        return;
+    }
+    $notify.alert({
+        title: '系統訊息',
+        message: res?.msg,
+        variant: 'success',
+    });
+};
 </script>
 
 <template>
-    <button class="cc-px-6 cc-py-3" @click="onTest">ajax</button>
+    <button @click="fetchSuccess">fetchSuccess</button>
+    <button @click="fetchError">Fetch Error</button>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+button {
+    background-color: #0096ff;
+    color: #fff;
+    margin-right: 1rem;
+    padding: 0.25rem 1rem;
+    border-radius: 4px;
+}
+</style>

@@ -1,12 +1,9 @@
 export const useApi = ({ $ajax }: any) => ({
-    getList: () => {
-        return $ajax.get('/list', {
+    getTest: () => {
+        return $ajax.get('/test', {
             customInterceptors: {
                 success: (response: any, defaultInterceptors: any) => {
-                    if (response.data === 'test') {
-                        return [null, { msg: 'test' }];
-                    }
-                    return defaultInterceptors.success(response);
+                    return [null, { msg: 'test' }];
                 },
                 failure: (error: any, defaultInterceptors: any) => {
                     return [new Error('test error'), null];
@@ -14,7 +11,7 @@ export const useApi = ({ $ajax }: any) => ({
             },
         });
     },
-    postEditData: (payload: any) => {
-        return $ajax.post('/data/edit', payload);
+    postTest: (payload: any) => {
+        return $ajax.post('/test', payload);
     },
 });

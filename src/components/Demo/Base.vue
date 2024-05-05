@@ -17,7 +17,7 @@ watch(
         <table class="cc-border-collapse">
             <tbody class="cc-divide-y cc-divide-x-0 cc-divide-primary cc-divide-solid">
                 <tr class="cc-divide-y-0 cc-divide-x cc-divide-primary cc-divide-solid">
-                    <th class="cc-px-2 cc-py-2 cc-w-[100px]">window size</th>
+                    <th class="cc-px-2 cc-py-2" width="150">ww x wh<br />(window size)</th>
                     <td class="cc-px-2 cc-py-2">{{ ww }} x {{ wh }}</td>
                 </tr>
                 <tr class="cc-divide-y-0 cc-divide-x cc-divide-primary cc-divide-solid">

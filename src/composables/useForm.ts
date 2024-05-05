@@ -82,11 +82,11 @@ export function useForm(data: Custom.AnyObj, { rules, configs }: TConfigs) {
         log(errors);
 
         if (fieldName) {
-            return errors[fieldName].length === 0 ? true : false;
+            return errors[fieldName]?.length === 0 ? true : false;
         }
 
         return Object.keys(errors).every((fieldName) => {
-            return errors[fieldName].length === 0 ? true : false;
+            return errors[fieldName]?.length === 0 ? true : false;
         });
     };
 
@@ -113,9 +113,9 @@ export function useForm(data: Custom.AnyObj, { rules, configs }: TConfigs) {
         const shakeDuration =
             typeof configs?.shakeDuration !== 'undefined' ? configs.shakeDuration : 800;
         if (shakeDuration > 0) {
-            errorElement.classList.add('cc-animate-shake');
+            errorElement.classList.add('form-animate-shake');
             setTimeout(() => {
-                errorElement.classList.remove('cc-animate-shake');
+                errorElement.classList.remove('form-animate-shake');
             }, shakeDuration || 800);
         }
 

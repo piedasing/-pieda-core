@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import { vLoading } from '@/directives/loading';
+
 const isLoading = ref(false);
 
 const toggleLoading = () => {
@@ -9,17 +11,12 @@ const toggleLoading = () => {
 </script>
 
 <template>
-    <div class="demo-loading cc-py-4">
-        <button
-            class="cc-bg-primary cc-text-white cc-border-none cc-rounded-[24px] cc-px-6 cc-py-2 cc-cursor-pointer"
-            @click="toggleLoading"
-        >
-            切換讀取狀態
-        </button>
-
-        <div class="cc-flex cc-gap-x-2 cc-py-4">
-            <div class="cc-flex-1 cc-h-[200px]" v-loading="isLoading">
-                <div class="cc-h-full cc-overflow-y-auto cc-px-6">
+    <div class="demo__loading">
+        <button class="" @click="toggleLoading">切換讀取狀態</button>
+        <!--  -->
+        <div class="box">
+            <div class="box__item" v-loading="isLoading">
+                <div class="box__item__inner">
                     <template v-for="i in 10">
                         <div :data-key="i">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam quasi
@@ -31,7 +28,7 @@ const toggleLoading = () => {
                 </div>
             </div>
             <div
-                class="cc-flex-1 cc-h-[200px]"
+                class="box__item"
                 v-loading="{
                     show: isLoading,
                     isFullPage: false,
@@ -39,7 +36,7 @@ const toggleLoading = () => {
                     overlay: { color: 'rgba(0,0,0,0.5)' },
                 }"
             >
-                <div class="cc-h-full cc-overflow-y-auto cc-px-6">
+                <div class="box__item__inner">
                     <template v-for="i in 10">
                         <div :data-key="i">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam quasi
@@ -54,4 +51,31 @@ const toggleLoading = () => {
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.demo__loading {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+button {
+    background-color: #0096ff;
+    color: #fff;
+    padding: 0.25rem 1rem;
+    border-radius: 4px;
+}
+.box {
+    display: flex;
+    gap: 8px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.box__item {
+    flex: 1;
+    height: 200px;
+}
+.box__item__inner {
+    height: 100%;
+    overflow-y: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+</style>
