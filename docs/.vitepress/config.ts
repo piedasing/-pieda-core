@@ -3,7 +3,7 @@ import path from 'path';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-    base: '/docs/',
+    base: '/-pieda-core/',
     title: '@pieda/core',
     description: '@pieda/core docs',
     themeConfig: {
