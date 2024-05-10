@@ -4,6 +4,12 @@ import Ajax from '@/components/Demo/Ajax.vue';
 
 # useAjax
 
+---
+
+<br>
+<Ajax></Ajax>
+<br>
+
 ::: code-group
 
 ```md [App.vue]
@@ -114,4 +120,4 @@ const fetchError = async () => {
 
 :::
 
-<Ajax></Ajax>
+
