@@ -4,10 +4,8 @@ import plugins, { TConfigs } from '@/plugins/index.js';
 import '@/assets/scss/styles.scss';
 
 export default {
-    install(app: ReturnType<typeof createApp>, configs: Custom.AnyObj) {
-        app.use(plugins, {
-            prefix: configs.prefix || 'core',
-        });
+    install(app: ReturnType<typeof createApp>, configs?: TConfigs) {
+        app.use(plugins, configs);
     },
 };
 
