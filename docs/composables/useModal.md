@@ -5,10 +5,12 @@ import Modal from '@/components/Demo/Modal.vue';
 # useModal
 
 ---
-
+### Example
+<br>
 <Modal></Modal>
 
 ---
+
 
 ::: info 一開始掛載 plugins 的時候，可帶入元件的前綴名稱，以防與專案元件命名重複
 
@@ -46,7 +48,7 @@ app.use(createCore, {
 </template>
 ```
 
-```md [Other.vue]
+```md [DynamicModal.vue]
 <script setup>
     const $modal = useModal({
     styles: {
@@ -103,3 +105,61 @@ const onToggle = () => {
 ```
 
 :::
+
+## Style
+
+```md
+<script setup>
+const $modal = useModal({
+    styles: {
+        modal: {
+            '--bm-overlay-color': 'rgba(120,120,120,0.8)',
+            '--bm-close-btn-size': '36px',
+        },
+    },
+})
+</script>
+```
+
+#### Overlay
+
+| 參數 | 說明 | 預設值(皆為字串) |
+| :-- | :-- |:--|
+| --bm-overlay-color  | 黑底背景顏色 | rgba(0, 0, 0, 0.5) |
+
+#### Dialog
+| 參數 | 說明 | 預設值(皆為字串) |
+| :-- | :-- |:--|
+| --bm-dialog-bgc  | 背景顏色 | #fff |
+| --bm-dialog-width  | 寬度 | 600px |
+| --bm-dialog-max-width  | 最大寬度 | 90vw |
+| --bm-dialog-height  | 高度 | 900px |
+| --bm-dialog-max-height  | 最大高度 | 85vh |
+| --bm-dialog-radius  | 圓角 | 8px |
+
+#### CloseBtn
+| 參數 | 說明 | 預設值(皆為字串) |
+| :-- | :-- |:--|
+| --bm-close-btn-size  | 尺寸大小 | 40px |
+| --bm-close-btn-radius  | 圓角 | 100% |
+| --bm-close-btn-color  | icon顏色 | #999 |
+| --bm-close-btn-bgc  | 背景顏色 | #fff |
+| --bm-close-btn-shadow  | 按鈕陰影 | 0 0 2px 0 rgba(0, 0, 0, 0.4) |
+
+
+## Class
+
+可直接寫class新增樣式 (以下範例使用前綴為 "cc-" tailwind)
+
+```md
+<script setup>
+const $modal = useModal({
+    classes: {
+        dialog: 'cc-bg-[#f00] cc-divide-y cc-divide-x-0 cc-divide-gray-400 cc-divide-solid',
+        header: 'cc-p-4 cc-text-center',
+        body: 'cc-p-4',
+        footer: 'cc-p-4 cc-text-right',
+    },
+});
+</script>
+```

@@ -4,6 +4,15 @@ import Notify from '@/components/Demo/Notify.vue'
 
 # useNotify
 
+---
+
+### Example
+<br>
+<Notify></Notify>
+<br>
+
+---
+
 ::: code-group
 
 ```md [App.vue]
@@ -47,4 +56,5 @@ $notify.toast({
 
 :::
 
-<Notify></Notify>
+關於Notify可調整細項請參考：<https://sweetalert2.github.io/#configuration>
+

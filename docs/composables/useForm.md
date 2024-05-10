@@ -6,6 +6,14 @@ import Form from '@/components/Demo/Form.vue'
 
 # useForm
 
+---
+### Example
+
+表單必填、格式驗證
+<Form></Form>
+
+---
+
 ::: code-group
 
 ```md [Form.vue]
@@ -22,7 +30,6 @@ const { formData, $validate, $firstError, $hasError } = useForm(
         max_money: '',
         baby: {
             name: '',
-            pic: '',
             age: '',
         },
     },
@@ -150,4 +157,36 @@ const onSubmit = async () => {
 
 :::
 
-<Form></Form>
+### Validator
+
+| 驗證規則 | 參數(參數+錯誤訊息) | 說明 | 備註 |
+| :-- | :-- | :-- |:--|
+| required | none | 必填 |  |
+| float |  none  | 浮點數 |  |
+| integer |  none  | 整數 |  |
+| lessThan | \{Number num\} | 小於指定值 |  |
+| lessThanOrEqualTo |  \{Number num\}  | 小於等於指定值 |  |
+| greaterThan |  \{Number num\}  | 大於指定值 |  |
+| greaterThanOrEqualTo |  \{Number num\}  | 大於等於指定值 |  |
+| between | \{Number low\},\{Number high\} | 值介於兩個指定值之間 |  |
+| size | \{Number num\} | 字段值為類似陣列的物件，其大小與指定的數量相同 | 可用在複選，至少選擇幾個答案 |
+| length | \{Number num\} | 內容長度 |  |
+| minLength | \{Number num\} | 最小長度 |  |
+| maxLength | \{Number num\} | 最大長度 |  |
+| lengthBetween | \{Number low\},\{Number high\} | 長度介於兩個指定值之間 |  |
+| in |	\{Array options\} | 值在指定的集合中 |  |
+| notIn |\{Array options\} | 值不在指定的集合中 |  |
+| match | String | 值與指定值匹配 |  |
+| regex | \{RegExp or String pattern\} \{String message?\} | 正則表達式 |  |
+| digit | none | 數字驗證 |  |
+| email | none | 電子郵件格式 |  |
+| url | none | URL 格式 | 以「http://」或「https://」開頭 |
+| tel | none | 市話格式(TW) | 國碼?-區號?-主要電話號碼-分機號碼? |
+| mobile | none | 手機號碼格式(TW) | 09 + 8位數字 |
+
+
+
+驗證規則參考 Simple Vue Validator：<https://simple-vue-validator.netlify.app/#r_validator>
+
+
+

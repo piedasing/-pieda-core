@@ -3,6 +3,12 @@ import Base from '@/components/Demo/Base.vue'
 </script>
 
 # useBase
+---
+
+用於獲得使用者裝置資訊
+
+<Base></Base>
+
 
 ::: code-group
 
@@ -16,4 +22,4 @@ const { ww, wh, isMobile, deviceInfo } = useBase();
 
 :::
 
-<Base></Base>
+
