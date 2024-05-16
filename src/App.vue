@@ -24,6 +24,7 @@ const tabItems = [
 const initApp = () => {
     $ajax.init({
         baseURL: '',
+        // interceptors: false,
     });
 };
 

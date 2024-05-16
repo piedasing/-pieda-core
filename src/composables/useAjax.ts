@@ -6,7 +6,7 @@ declare namespace NAjax {
         baseURL: string;
         proxyPath?: string;
         headers?: THeader;
-        interceptors?: TInterceptors;
+        interceptors?: TInterceptors | false;
     };
 
     export type THeader = {
@@ -69,8 +69,14 @@ const setCommonHeaders = (headers: NAjax.THeader) => {
     });
 };
 
+let interceptorId = ref(-1);
+
 const setInterceptors = (interceptors?: NAjax.TInterceptors) => {
-    axiosInstance.interceptors.response.use(
+    if (interceptorId.value > -1) {
+        axiosInstance.interceptors.response.eject(interceptorId.value);
+    }
+
+    interceptorId.value = axiosInstance.interceptors.response.use(
         (response: NAjax.TAjaxResponse) => {
             if (interceptors?.success && typeof interceptors.success === 'function') {
                 return interceptors.success(response, defaultInterceptors) as any;
@@ -87,8 +93,6 @@ const setInterceptors = (interceptors?: NAjax.TInterceptors) => {
 };
 
 export const useAjax = () => {
-    setInterceptors(defaultInterceptors);
-
     return {
         isLoading,
         setLoading(show = false) {
@@ -97,7 +101,9 @@ export const useAjax = () => {
         //
         init({ baseURL, proxyPath, headers, interceptors }: NAjax.TInitData) {
             setBaseURL(baseURL, proxyPath);
-            setInterceptors(interceptors);
+            if (interceptors !== false) {
+                setInterceptors(interceptors || defaultInterceptors);
+            }
             if (headers) {
                 setCommonHeaders(headers);
             }
