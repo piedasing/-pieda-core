@@ -1,43 +1,42 @@
-<script setup>
+<script setup lang="ts">
 import dayjs from 'dayjs';
+import { DatePicker as VDatePicker } from 'v-calendar';
+import 'v-calendar/dist/style.css';
 
 const emits = defineEmits(['update:value']);
-import { withDefaults, defineProps } from 'vue';
+
+type TValue =
+    | string
+    | Date
+    | { start: Date | string, end: Date | string };
 
 const props = withDefaults(
-    defineProps({
-        placeholder: {
-            type: String,
-            default: '',
-        },
-        value: {
-            type: [Date, String],
-            default: '',
-        },
-        startDate: {
-            type: String,
-            default: '',
-        },
-        endDate: {
-            type: String,
-            default: '',
-        },
-        mode: {
-            type: String,
-            default: 'date', // date | dateTime | time
-        },
-    }),
+    defineProps<{
+        placeholder?: string;
+        value: TValue;
+        startDate?: string;
+        endDate?: string;
+        mode?: string;
+        color?: string;
+    }>(),
     {
         placeholder: '',
         value: '',
         startDate: '',
         endDate: '',
+        color: 'blue',
         mode: 'date',
-    }
+    },
 );
 
-
-const onChanged = (evt) => {
+const onChanged = (evt: TValue) => {
+    if (typeof evt === 'object' && !(evt instanceof Date)) {
+        onUpdate({
+            start: dayjs(evt.start).format('YYYY/MM/DD'),
+            end: dayjs(evt.end).format('YYYY/MM/DD'),
+        });
+        return;
+    }
     if (!evt || !dayjs(evt).isValid()) {
         onUpdate('');
         return;
@@ -45,11 +44,17 @@ const onChanged = (evt) => {
     onUpdate(dayjs(evt).format('YYYY/MM/DD'));
 };
 
-const onUpdate = (value = '') => {
+const onUpdate = (value: TValue) => {
     emits('update:value', value);
 };
 
-const toDate = (value = null) => {
+const toDate = (value: TValue) => {
+    if (typeof value === 'object' && !(value instanceof Date)) {
+        return {
+            start:  dayjs(value.start).toDate(),
+            end: dayjs(value.end).toDate(),
+        }
+    }
     return value ? dayjs(value).toDate() : undefined;
 };
 </script>
@@ -67,7 +72,9 @@ const toDate = (value = null) => {
         :min-date="toDate(props.startDate)"
         :max-date="toDate(props.endDate)"
         :mode="props.mode"
-        @update:modelValue="onChanged">
+        :color="props.color"
+        @update:modelValue="onChanged"
+    >
         <template v-slot="{ inputValue, togglePopover }">
             <slot v-bind="{ inputValue, togglePopover }"></slot>
         </template>
