@@ -30,6 +30,7 @@ export default defineConfig({
                     { text: 'useAjax', link: '/composables/useAjax' },
                     { text: 'useForm', link: '/composables/useForm' },
                     { text: 'useModal', link: '/composables/useModal' },
+                    { text: 'useDatePicker', link: '/composables/useDatePicker' },
                 ],
             },
             {
