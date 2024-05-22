@@ -59,3 +59,5 @@ const selectedColor = ref('pink');
 | endDate     | 設定選擇日期範圍中的結束日期 |                                                                    | " "              |
 | color       | 按鈕顏色                     | gray, red, orange, yellow, green, teal, blue, indigo, purple, pink | "blue"           |
 | mode        | 日期選擇器類型               | date(選日),dateTime(選日選時),time(選時)                           | "date"           |
+
+以上範例使用套件為：<https://vcalendar.io/>
