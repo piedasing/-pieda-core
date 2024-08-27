@@ -26,8 +26,9 @@ time:
 ```md [DatePicker.vue]
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useDatePicker } from '@pieda/core';
 
-import DatePicker from '@/components/DatePicker.vue';
+const { DatePicker } = useDatePicker();
 
 const value = ref('2024-01-01');
 const selectedColor = ref('pink');
