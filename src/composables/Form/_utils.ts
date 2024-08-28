@@ -21,7 +21,7 @@ export const isEmpty = function (value: unknown) {
     } else if (value === undefined || value === null) {
         return true;
     } else {
-        return !String(value).length;
+        return !String(value).trim().length;
     }
 };
 

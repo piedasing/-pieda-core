@@ -28,7 +28,7 @@ const { formData, $validate, $firstError, $hasError } = useForm(
                     .url('網址格式不正確');
             },
             'formData.email'(value) {
-                return Validator.value(value).email('信箱格式不正確');
+                return Validator.value(value).required('此欄必填').email('信箱格式不正確');
             },
             'formData.mobile'(value) {
                 if (value.length > 0) {
@@ -105,7 +105,12 @@ const onSubmit = async () => {
             </p>
         </div>
         <div class="form__item">
-            <input type="text" name="email" v-model="formData.email" placeholder="請輸入信箱" />
+            <input
+                type="text"
+                name="email"
+                v-model.trim="formData.email"
+                placeholder="請輸入信箱"
+            />
             <p class="invalid-feedback" v-if="$hasError('formData.email')">
                 {{ $firstError('formData.email') }}
             </p>
