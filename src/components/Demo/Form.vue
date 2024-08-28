@@ -5,6 +5,7 @@ const { formData, $validate, $firstError, $hasError } = useForm(
     {
         name: '',
         url: '',
+        email: '',
         mobile: '',
         show_mobile: false,
         min_money: '',
@@ -25,6 +26,9 @@ const { formData, $validate, $firstError, $hasError } = useForm(
                     .required('此欄必填')
                     .minLength(3, '最少需填寫3個字元')
                     .url('網址格式不正確');
+            },
+            'formData.email'(value) {
+                return Validator.value(value).email('信箱格式不正確');
             },
             'formData.mobile'(value) {
                 if (value.length > 0) {
@@ -98,6 +102,12 @@ const onSubmit = async () => {
             <input type="text" name="url" v-model="formData.url" placeholder="請輸入網址" />
             <p class="invalid-feedback" v-if="$hasError('formData.url')">
                 {{ $firstError('formData.url') }}
+            </p>
+        </div>
+        <div class="form__item">
+            <input type="text" name="email" v-model="formData.email" placeholder="請輸入信箱" />
+            <p class="invalid-feedback" v-if="$hasError('formData.email')">
+                {{ $firstError('formData.email') }}
             </p>
         </div>
         <div class="form__item">
