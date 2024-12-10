@@ -6,6 +6,31 @@ export default defineConfig({
     base: '/-pieda-core/',
     title: '@pieda/core',
     description: '@pieda/core docs',
+    head: [
+        [
+            'script',
+            {
+                src: 'https://www.googletagmanager.com/gtag/js?id=G-JZRD6WQ6YL',
+            },
+        ],
+        [
+            'script',
+            {},
+            `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', 'G-JZRD6WQ6YL');
+            `,
+        ],
+        [
+            'sciprt',
+            {
+                src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1339012371875050',
+            },
+        ],
+    ],
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
