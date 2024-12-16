@@ -4,7 +4,6 @@ import { ref } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
 
 const datetime = ref('2024-01-01 08:00:00');
-const time = ref('08:00:00');
 const datetimeRange = ref({
     start: '2024-01-01 08:00:00',
     end: '2024-01-01 08:00:00',
