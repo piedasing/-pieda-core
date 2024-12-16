@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 
-import DatePicker from '@/components/Demo/DatePicker.vue';
+import DatePicker from '@/components/Demo/DemoDatePicker.vue';
 
 const date = ref('2024-01-01');
 const datetime = ref('2024-01-01 08:00:00');
