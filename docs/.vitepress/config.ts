@@ -24,12 +24,6 @@ export default defineConfig({
                 gtag('config', 'G-JZRD6WQ6YL');
             `,
         ],
-        [
-            'sciprt',
-            {
-                src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1339012371875050',
-            },
-        ],
     ],
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
