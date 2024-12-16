@@ -5,6 +5,7 @@ import Form from './Form.vue';
 import Loader from './Loader.vue';
 import Loading from './Loading.vue';
 import Modal from './Modal.vue';
+import DemoDatePicker from './DemoDatePicker.vue';
 
 export {
     //
@@ -15,4 +16,5 @@ export {
     Loader,
     Loading,
     Modal,
+    DemoDatePicker,
 };

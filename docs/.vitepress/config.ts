@@ -45,7 +45,10 @@ export default defineConfig({
             },
             {
                 text: 'Components',
-                items: [{ text: 'Loaders', link: '/components/loaders' }],
+                items: [
+                    { text: 'Loaders', link: '/components/loaders' },
+                    { text: 'DatePicker', link: '/components/datePicker' },
+                ],
             },
             {
                 text: 'Composables',
@@ -55,7 +58,6 @@ export default defineConfig({
                     { text: 'useAjax', link: '/composables/useAjax' },
                     { text: 'useForm', link: '/composables/useForm' },
                     { text: 'useModal', link: '/composables/useModal' },
-                    { text: 'useDatePicker', link: '/composables/useDatePicker' },
                 ],
             },
             {
