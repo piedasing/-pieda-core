@@ -65,7 +65,7 @@ const setGlobalConfigs = (configs?: Partial<SweetAlertOptions>) => {
     defaultConfigs.value = {
         ...defaultConfigs.value,
         ...configs,
-    };
+    } as Partial<SweetAlertOptions>;
 };
 
 export const createNotify = (
@@ -86,7 +86,7 @@ export const useNotify = () => {
                     typeof configs.title !== 'undefined'
                         ? configs.title
                         : defaultConfigs.value.title,
-            });
+            } as SweetAlertOptions);
         },
         toast({
             title = '',
@@ -135,7 +135,7 @@ export const useNotify = () => {
                 confirmButtonText: '確認',
                 cancelButtonText: '取消',
                 ...configs,
-            });
+            } as SweetAlertOptions);
             return SwalTemplate.fire({
                 title: typeof title !== 'undefined' ? title : defaultConfigs.value.title,
                 html: message?.replace(/\n/g, '<br>') || message,
