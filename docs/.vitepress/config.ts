@@ -6,6 +6,25 @@ export default defineConfig({
     base: '/-pieda-core/',
     title: '@pieda/core',
     description: '@pieda/core docs',
+    head: [
+        [
+            'script',
+            {
+                src: 'https://www.googletagmanager.com/gtag/js?id=G-JZRD6WQ6YL',
+            },
+        ],
+        [
+            'script',
+            {},
+            `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', 'G-JZRD6WQ6YL');
+            `,
+        ],
+    ],
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
@@ -20,7 +39,10 @@ export default defineConfig({
             },
             {
                 text: 'Components',
-                items: [{ text: 'Loaders', link: '/components/loaders' }],
+                items: [
+                    { text: 'Loaders', link: '/components/loaders' },
+                    { text: 'DatePicker', link: '/components/datePicker' },
+                ],
             },
             {
                 text: 'Composables',
@@ -30,7 +52,6 @@ export default defineConfig({
                     { text: 'useAjax', link: '/composables/useAjax' },
                     { text: 'useForm', link: '/composables/useForm' },
                     { text: 'useModal', link: '/composables/useModal' },
-                    { text: 'useDatePicker', link: '/composables/useDatePicker' },
                 ],
             },
             {

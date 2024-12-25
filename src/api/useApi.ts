@@ -12,6 +12,17 @@ export const useApi = ({ $ajax }: any) => ({
         });
     },
     postTest: (payload: any) => {
-        return $ajax.post('/test', payload);
+        return $ajax.post('/test', payload, {
+            customInterceptors: {
+                success: (response: any, defaultInterceptors: any) => {
+                    console.log(response);
+                    return [null, { msg: 'test 2' }];
+                },
+                failure: (error: any, defaultInterceptors: any) => {
+                    console.log(error);
+                    return [new Error('test error'), null];
+                },
+            },
+        });
     },
 });

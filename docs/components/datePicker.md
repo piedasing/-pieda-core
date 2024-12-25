@@ -1,8 +1,26 @@
 <script setup>
-import DatePicker from '@/components/Demo/DatePicker.vue';
+import { ref } from 'vue';
+
+import DatePicker from '@/components/Demo/DemoDatePicker.vue';
+
+const date = ref('2024-01-01');
+const datetime = ref('2024-01-01 08:00:00');
+const time = ref('08:00:00');
 </script>
 
-# useDatePicker
+# DatePicker
+
+::: info 一開始掛載 plugins 的時候，可帶入元件的前綴名稱，以防與專案元件命名重複
+
+::: code-group
+
+```js [main.js] {2}
+app.use(createCore, {
+    prefix: 'core',
+});
+```
+
+:::
 
 ---
 
@@ -11,13 +29,13 @@ import DatePicker from '@/components/Demo/DatePicker.vue';
 日期選擇器
 
 date:
-<DatePicker></DatePicker>
+<core-date-picker v-model="date"></core-date-picker>
 
 datetime:
-<DatePicker :mode="'datetime'" :color="'purple'"></DatePicker>
+<coder-date-picker v-model="datetime" :mode="'datetime'" :color="'purple'"></coder-date-picker>
 
 time:
-<DatePicker :mode="'time'" :color="'gray'"></DatePicker>
+<coder-date-picker v-model="time" :mode="'time'" :color="'gray'"></coder-date-picker>
 
 ---
 
@@ -27,14 +45,12 @@ time:
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import DatePicker from '@/components/DatePicker.vue';
-
 const value = ref('2024-01-01');
 const selectedColor = ref('pink');
 </script>
 
 <template>
-    <DatePicker :value="value"  :color="selectedColor">
+    <core-date-picker :value="value"  :color="selectedColor">
         <template v-slot="{ inputValue, togglePopover }">
             <div class="box">
                 <input class="date__input" type="text" :value="inputValue" readonly>
@@ -43,7 +59,7 @@ const selectedColor = ref('pink');
                 </button>
             </div>
         </template>
-    </DatePicker>
+    </core-date-picker>
 </template>
 ```
 

@@ -18,4 +18,3 @@ export { useAjax } from './composables';
 export { useForm } from './composables';
 export { useNotify, createNotify } from './composables';
 export { useModal } from './composables';
-export { useDatePicker } from './composables';

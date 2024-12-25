@@ -12,18 +12,20 @@ const { isLoading } = $ajax;
 
 const tab = ref('useBase');
 const tabItems = [
+    { label: 'Loader', value: 'Loader' },
+    { label: 'DatePicker', value: 'DatePicker' },
+    { label: 'v-loading', value: 'v-loading' },
     { label: 'useBase', value: 'useBase' },
     { label: 'useNotify', value: 'useNotify' },
     { label: 'useAjax', value: 'useAjax' },
     { label: 'useForm', value: 'useForm' },
-    { label: 'Loader', value: 'Loader' },
-    { label: 'v-loading', value: 'v-loading' },
     { label: 'useModal', value: 'useModal' },
 ];
 
 const initApp = () => {
     $ajax.init({
         baseURL: '',
+        // interceptors: false,
     });
 };
 
@@ -56,6 +58,9 @@ onMounted(() => {
                 </template>
                 <template v-else-if="tab === 'useModal'">
                     <Demo.Modal></Demo.Modal>
+                </template>
+                <template v-else-if="tab === 'DatePicker'">
+                    <Demo.DemoDatePicker></Demo.DemoDatePicker>
                 </template>
             </template>
         </Tab>

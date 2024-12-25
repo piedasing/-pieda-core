@@ -208,4 +208,15 @@ export default class Validator {
     public mobile = (message?: string) => {
         return this.regex(/^[09]{2}[0-9]{8}$/, message || templates.mobile);
     };
+
+    public custom = (func: Function) => {
+        if (typeof func !== 'function') {
+            throw new Error('custom validator must be a function.');
+        }
+        const result: any = func(this.value);
+        if (result && typeof result === 'string') {
+            this.messages.push(result);
+        }
+        return this;
+    };
 }

@@ -1,5 +1,5 @@
 <script setup>
-import Notify from '@/components/Demo/Notify.vue'
+import * as Demo from '@/components/Demo/'
 </script>
 
 # useNotify
@@ -7,9 +7,9 @@ import Notify from '@/components/Demo/Notify.vue'
 ---
 
 ### Example
+
 <br>
-<Notify></Notify>
-<br>
+<Demo.Notify></Demo.Notify>
 
 ---
 
@@ -30,6 +30,13 @@ $notify.setGlobalConfigs({
 </script>
 ```
 
+```js [toast]
+$notify.toast({
+    title: '訊息內容',
+    variant: 'success',
+});
+```
+
 ```js [alert]
 $notify.alert({
     title: '系統通知',
@@ -47,14 +54,36 @@ $notify.alert({
 });
 ```
 
-```js [toast]
-$notify.toast({
-    title: '訊息內容',
-    variant: 'success',
+```js [custom]
+const result = await $notify.custom({
+    render: (h) => {
+        return h('div', null, [
+            h(
+                'p',
+                { class: 'cc-mb-0' },
+                'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, veniam. Sunt, consequuntur? Assumenda, sed laboriosam autem mollitia fugit, non officiis harum maiores architecto voluptatum asperiores dolor quas quos eum doloribus.',
+            ),
+            h('a', { href: 'https://www.google.com' }, 'link'),
+            h(
+                'button',
+                {
+                    onClick: () => {
+                        console.log('clicked!!!');
+                    },
+                },
+                '按鈕',
+            ),
+        ]);
+    },
+    customClass: {
+        popup: 'cc-bg-[#0096ff] cc-text-white cc-rounded-md cc-w-[1024px]',
+        htmlContainer: 'cc-py-10',
+    },
 });
+
+console.log(result);
 ```
 
 :::
 
-關於Notify可調整細項請參考：<https://sweetalert2.github.io/#configuration>
-
+關於 Notify 可調整細項請參考：<https://sweetalert2.github.io/#configuration>

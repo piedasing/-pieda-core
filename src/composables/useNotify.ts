@@ -1,4 +1,4 @@
-import { ref, Ref, createApp } from 'vue';
+import { ref, Ref, createApp, h, VNode } from 'vue';
 import Swal, { SweetAlertOptions, SweetAlertIcon, SweetAlertResult } from 'sweetalert2';
 
 namespace NNotify {
@@ -11,10 +11,19 @@ namespace NNotify {
     } & SweetAlertOptions;
 
     export type TAlert = {
-        title?: string;
+        title?: string | false;
         message: string;
         variant?: SweetAlertIcon | undefined;
         confirm?: boolean;
+        closeable?: boolean | undefined;
+    } & SweetAlertOptions;
+
+    export type TCustom = {
+        title?: string | false;
+        variant?: SweetAlertIcon | undefined;
+        confirm?: boolean;
+        closeable?: boolean | undefined;
+        render: (r: typeof h) => Partial<VNode>;
     } & SweetAlertOptions;
 }
 
@@ -65,7 +74,7 @@ const setGlobalConfigs = (configs?: Partial<SweetAlertOptions>) => {
     defaultConfigs.value = {
         ...defaultConfigs.value,
         ...configs,
-    };
+    } as Partial<SweetAlertOptions>;
 };
 
 export const createNotify = (
@@ -86,7 +95,7 @@ export const useNotify = () => {
                     typeof configs.title !== 'undefined'
                         ? configs.title
                         : defaultConfigs.value.title,
-            });
+            } as SweetAlertOptions);
         },
         toast({
             title = '',
@@ -100,7 +109,7 @@ export const useNotify = () => {
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                showCloseButton: closeable,
+                showCloseButton: closeable ? true : false,
                 timer,
                 timerProgressBar,
                 didOpen: (toast) => {
@@ -125,22 +134,59 @@ export const useNotify = () => {
             message = '',
             variant = undefined,
             confirm = false,
+            closeable = true,
             ...configs
         }: NNotify.TAlert): Promise<SweetAlertResult<any>> {
             const SwalTemplate = Swal.mixin({
                 ...defaultConfigs.value,
                 showConfirmButton: true,
                 showCancelButton: confirm ? true : false,
-                showCloseButton: true,
+                showCloseButton: closeable ? true : false,
                 confirmButtonText: '確認',
                 cancelButtonText: '取消',
                 ...configs,
-            });
+            } as SweetAlertOptions);
+
             return SwalTemplate.fire({
                 title: typeof title !== 'undefined' ? title : defaultConfigs.value.title,
                 html: message?.replace(/\n/g, '<br>') || message,
                 icon: getIcon(variant),
                 iconColor: configs.iconColor || getIconColor(variant),
+            });
+        },
+        custom({
+            title = false,
+            variant = undefined,
+            confirm = false,
+            closeable = true,
+            render,
+            ...configs
+        }: NNotify.TCustom): Promise<SweetAlertResult<any>> {
+            const $container = document.createElement('div');
+            // 創建並掛載應用
+            const alertApp = createApp({
+                render: () => render(h),
+            });
+            alertApp.mount($container);
+
+            const SwalTemplate = Swal.mixin({
+                showConfirmButton: false,
+                showCancelButton: confirm ? true : false,
+                showCloseButton: closeable ? true : false,
+                ...configs,
+            } as SweetAlertOptions);
+
+            return new Promise((resolve, reject) => {
+                SwalTemplate.fire({
+                    title: typeof title !== 'undefined' ? title : defaultConfigs.value.title,
+                    html: $container,
+                    icon: getIcon(variant),
+                    iconColor: configs.iconColor || getIconColor(variant),
+                }).then((result: SweetAlertResult<any>) => {
+                    alertApp.unmount();
+
+                    resolve(result);
+                });
             });
         },
     };
