@@ -1,14 +1,11 @@
 <script setup>
-import Ajax from '@/components/Demo/Ajax.vue';
+import * as Demo from '@/components/Demo/';
 </script>
 
 # useAjax
 
----
-
 <br>
-<Ajax></Ajax>
-<br>
+<Demo.Ajax></Demo.Ajax>
 
 ::: code-group
 
@@ -119,5 +116,3 @@ const fetchError = async () => {
 ```
 
 :::
-
-
