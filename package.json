@@ -38,15 +38,14 @@
         "docs:preview": "vitepress preview docs"
     },
     "dependencies": {
-        "@popperjs/core": "^2.11.8",
-        "axios": "^1.4.0",
+        "axios": "^1.8.4",
         "click-outside-vue3": "^4.0.1",
-        "dayjs": "^1.11.11",
+        "dayjs": "^1.11.13",
         "deep-equal": "^2.2.3",
         "mobile-device-detect": "^0.4.3",
-        "sweetalert2": "^11.15.3",
+        "sweetalert2": "^11.17.2",
         "v-calendar": "^3.1.2",
-        "vue": "^3.2.47"
+        "vue": "^3.5.13"
     },
     "devDependencies": {
         "@types/deep-equal": "^1.0.4",
@@ -66,7 +65,8 @@
         "vue-tsc": "^1.4.2"
     },
     "peerDependencies": {
-        "axios": "^1.4.0",
-        "vue": "^3.2.47"
+        "axios": "^1.8.4",
+        "sweetalert2": "^11.17.2",
+        "vue": "^3.5.13"
     }
 }
