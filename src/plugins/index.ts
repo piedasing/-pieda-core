@@ -1,15 +1,12 @@
 import { createApp } from 'vue';
 import vClickOutside from 'click-outside-vue3';
 import { SweetAlertOptions } from 'sweetalert2';
-import { setupCalendar, Calendar as VCalendar, DatePicker as VDatePicker } from 'v-calendar';
 
 import { createNotify } from '@/composables';
 
-import 'v-calendar/dist/style.css';
-
 import * as Loaders from '@/components/Loaders';
 import BaseModal from '@/components/BaseModal.vue';
-import DatePicker from '@/components/DatePicker.vue';
+import DatePicker from '@/components/DatePicker/DatePicker.vue';
 
 import { vLoading } from '@/directives/loading';
 
@@ -41,9 +38,5 @@ export default (app: ReturnType<typeof createApp>, configs?: TConfigs) => {
         app.use(createNotify, { ...notifyConfigs });
     }
     // 註冊 日期選擇器 元件
-    app.use(setupCalendar, {});
-
-    app.component('VCalendar', VCalendar);
-    app.component('VDatePicker', VDatePicker);
     app.component(`${prefix}-date-picker`, DatePicker);
 };

@@ -10,7 +10,7 @@ const $ajax = useAjax();
 
 const { isLoading } = $ajax;
 
-const tab = ref('useBase');
+const tab = ref('DatePicker');
 const tabItems = [
     { label: 'Loader', value: 'Loader' },
     { label: 'DatePicker', value: 'DatePicker' },
