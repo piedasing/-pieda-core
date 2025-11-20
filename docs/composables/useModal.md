@@ -9,7 +9,9 @@ import * as Demo from '@/components/Demo/';
 ### Example
 
 <br>
-<Demo.Modal></Demo.Modal>
+<ClientOnly>
+    <Demo.Modal></Demo.Modal>
+</ClientOnly>
 
 ---
 
