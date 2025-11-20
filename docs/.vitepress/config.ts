@@ -8,6 +8,13 @@ export default defineConfig({
     description: '@pieda/core docs',
     head: [
         [
+            'meta',
+            {
+                name: 'google-adsense-account',
+                content: 'ca-pub-1339012371875050',
+            },
+        ],
+        [
             'script',
             {
                 src: 'https://www.googletagmanager.com/gtag/js?id=G-JZRD6WQ6YL',
