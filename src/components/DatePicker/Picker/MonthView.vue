@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref } from 'vue';
 import dayjs from 'dayjs';
 
-import DatePickerLayout from './DatePickerLayout.vue';
+import PickerLayout from './Layout.vue';
 
-const emits = defineEmits(['update:year', 'update:month', 'switch:view']);
+const emits = defineEmits(['update:modelValue', 'pick', 'switch:view']);
 
 const props = withDefaults(
     defineProps<{
-        year: number;
-        month: number;
+        modelValue: string;
     }>(),
     {
-        year: dayjs().year(),
-        month: dayjs().month() + 1,
+        modelValue: dayjs().format('YYYY-MM-DD'),
     },
 );
 
@@ -32,16 +30,13 @@ const months = [
     { label: '十二月', value: 12 },
 ];
 
-const currentMonth = computed(() => {
-    return dayjs().month() + 1;
-});
+const year = ref(dayjs(props.modelValue).year());
 
-const currentYear = computed(() => {
-    return dayjs().year();
-});
-
-const isThisMonth = (value: number) => {
-    return value === currentMonth.value && props.year === currentYear.value;
+const isPicked = (value: number) => {
+    return (
+        value === dayjs(props.modelValue).month() + 1 &&
+        year.value === dayjs(props.modelValue).year()
+    );
 };
 
 const onSwitchView = () => {
@@ -49,16 +44,17 @@ const onSwitchView = () => {
 };
 
 const onSwitchYear = (value: number) => {
-    emits('update:year', props.year + value);
+    year.value += value;
 };
 
 const onPick = (value: number) => {
-    emits('update:month', value);
+    emits('update:modelValue', `${year.value}-${value}-01`);
+    emits('pick', `${year.value}-${value}-01`);
 };
 </script>
 
 <template>
-    <DatePickerLayout @prev="onSwitchYear(-1)" @next="onSwitchYear(1)" @switch:view="onSwitchView">
+    <PickerLayout @prev="onSwitchYear(-1)" @next="onSwitchYear(1)" @switch:view="onSwitchView">
         <template v-slot:headerText>
             {{ `${year}年` }}
         </template>
@@ -67,7 +63,7 @@ const onPick = (value: number) => {
                 <template v-for="item in months">
                     <div
                         class="month"
-                        :class="{ 'is-this-month': isThisMonth(item.value) }"
+                        :class="{ active: isPicked(item.value) }"
                         @click="onPick(item.value)"
                     >
                         {{ item.label }}
@@ -75,7 +71,7 @@ const onPick = (value: number) => {
                 </template>
             </div>
         </template>
-    </DatePickerLayout>
+    </PickerLayout>
 </template>
 
 <style lang="scss" scoped>
@@ -92,10 +88,10 @@ const onPick = (value: number) => {
         justify-content: center;
         align-items: center;
         width: var(--cell-size);
-        height: var(--cell-size);
         cursor: pointer;
         border-radius: 4px;
-        &.is-this-month {
+        padding: 8px;
+        &.active {
             background: #0096ff;
             color: #fff;
         }

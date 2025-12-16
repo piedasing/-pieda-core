@@ -1,5 +1,16 @@
-<script setup>
-const emits = defineEmits(['prev', 'next', 'switch:view']);
+<script setup lang="ts">
+const emits = defineEmits(['prev', 'next', 'reset']);
+
+const props = withDefaults(
+    defineProps<{
+        showResetButton: boolean;
+        resetButtonText: string;
+    }>(),
+    {
+        showResetButton: true,
+        resetBtnText: '重設',
+    },
+);
 
 const onPrev = () => {
     emits('prev');
@@ -9,17 +20,20 @@ const onNext = () => {
     emits('next');
 };
 
-const onSwitchView = () => {
-    emits('switch:view');
+const onReset = () => {
+    emits('reset');
 };
 </script>
 
 <template>
     <div class="datepicker__layout">
         <div class="datepicker__layout__header">
-            <div class="datepicker__layout__header__text" @click="onSwitchView">
+            <div class="datepicker__layout__header__text">
                 <slot name="headerText"></slot>
             </div>
+            <button class="datepicker__layout__reset__btn" @click="onReset">
+                {{ props.resetButtonText }}
+            </button>
             <button
                 class="datepicker__layout__header__btn datepicker__layout__header__btn__prev"
                 @click="onPrev"
@@ -49,12 +63,23 @@ const onSwitchView = () => {
 
 <style lang="scss" scoped>
 .datepicker__layout__header {
-    --btn-size: 32px;
+    --btn-size: 28px;
     --day-size: 48px;
     --gap-size: 4px;
 
     display: flex;
     align-items: center;
+    column-gap: var(--gap-size);
+
+    .datepicker__layout__reset__btn {
+        border-radius: 4px;
+        border: none;
+        outline: none;
+        background-color: #f1341c;
+        color: #fff;
+        padding: 2px 8px;
+        cursor: pointer;
+    }
     .datepicker__layout__header__btn {
         flex: none;
         width: var(--btn-size);

@@ -3,18 +3,22 @@ import { ref } from 'vue';
 
 import DatePicker from '@/components/DatePicker/DatePicker.vue';
 
-const datetime = ref('2025-08-01 08:00:00');
+const date = ref('2025-01-01');
+const datetime = ref('2025-01-01 08:00:00');
 const datetimeRange = ref({
-    start: '2024-01-01 08:00:00',
-    end: '2024-01-01 08:00:00',
+    start: '2025-01-01 08:00:00',
+    end: '2025-01-01 08:00:00',
 });
 </script>
 
 <template>
     <div class="cc-mb-4">
-        <DatePicker v-model="datetime" :mode="'datetime'">
-            <template v-slot:toggler="{ show, onToggle }">
-                <button @click="onToggle">{{ show ? '隱藏' : '顯示' }}</button>
+        <DatePicker v-model="date" :mode="'date'" :autoHideMenu="false">
+            <template v-slot:default="{ inputValue, isPickerShown, onTogglePicker }">
+                <div class="">
+                    <input type="text" readonly :value="inputValue" />
+                    <button @click="onTogglePicker">{{ isPickerShown ? '隱藏' : '顯示' }}</button>
+                </div>
             </template>
         </DatePicker>
     </div>

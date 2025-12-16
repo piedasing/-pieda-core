@@ -2,28 +2,21 @@
 import { computed, ref } from 'vue';
 import dayjs from 'dayjs';
 
-import DatePickerLayout from './DatePickerLayout.vue';
+import PickerLayout from './Layout.vue';
 
-const emits = defineEmits(['update:modelValue', 'switch:view']);
+const emits = defineEmits(['update:modelValue', 'pick', 'switch:view']);
 
 const props = withDefaults(
     defineProps<{
-        year: number;
-        month: number;
-        date: number;
+        modelValue: string;
     }>(),
     {
-        year: dayjs().year(),
-        month: dayjs().month() + 1,
-        date: dayjs().date(),
+        modelValue: dayjs().format('YYYY-MM-DD'),
     },
 );
 
-const today = dayjs().format('YYYY-MM-DD');
-
-const year = ref(props.year);
-const month = ref(props.month);
-const date = ref(props.date);
+const year = ref(dayjs(props.modelValue).year());
+const month = ref(dayjs(props.modelValue).month() + 1);
 
 const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
 
@@ -48,16 +41,18 @@ const days = computed(() => {
             result[i].push({
                 label: date.format('D'),
                 value: date.format('YYYY-MM-DD'),
-                isToday: date.isSame(today),
-                isPast: date.isBefore(today),
-                isFuture: date.isAfter(today),
-                isThisMonth: date.isSame(today, 'month'),
+                isToday: date.isSame(dayjs().format('YYYY-MM-DD')),
+                isThisMonth: date.isSame(props.modelValue, 'month'),
             });
         }
     }
 
     return result;
 });
+
+const isPicked = (value: string) => {
+    return value === dayjs(props.modelValue).format('YYYY-MM-DD');
+};
 
 const onSwitchView = () => {
     emits('switch:view');
@@ -76,19 +71,31 @@ const onSwitchMonth = (value: number) => {
     }
 };
 
+const onReset = () => {
+    const value = dayjs().format('YYYY-MM-DD');
+    emits('update:modelValue', value);
+};
+
 const onPick = (value: string) => {
     emits('update:modelValue', value);
+    emits('pick', value);
 };
 </script>
 
 <template>
-    <DatePickerLayout
+    <PickerLayout
+        :resetButtonText="'今天'"
         @prev="onSwitchMonth(-1)"
         @next="onSwitchMonth(1)"
-        @switch:view="onSwitchView"
+        @reset="onReset"
     >
         <template v-slot:headerText>
-            {{ `${year}年${month}月` }}
+            <div
+                class="cc-cursor-pointer cc-inline-block hover:cc-bg-gray-200 hover:cc-rounded"
+                @click="onSwitchView"
+            >
+                {{ `${year}年${month}月` }}
+            </div>
         </template>
         <template v-slot:default>
             <div class="weekday">
@@ -103,9 +110,8 @@ const onPick = (value: string) => {
                             class="day"
                             :class="{
                                 'is-today': day.isToday,
-                                'is-past': day.isPast,
-                                'is-future': day.isFuture,
                                 'is-this-month': day.isThisMonth,
+                                active: isPicked(day.value),
                             }"
                             @click="onPick(day.value)"
                         >
@@ -115,7 +121,7 @@ const onPick = (value: string) => {
                 </div>
             </template>
         </template>
-    </DatePickerLayout>
+    </PickerLayout>
 </template>
 
 <style lang="scss" scoped>
@@ -128,6 +134,11 @@ const onPick = (value: string) => {
     display: flex;
     column-gap: var(--gap-size);
     row-gap: var(--gap-size);
+    user-select: none;
+    margin-bottom: var(--gap-size);
+    &:last-child {
+        margin-bottom: 0;
+    }
     .day {
         flex: none;
         width: var(--day-size);
@@ -139,17 +150,28 @@ const onPick = (value: string) => {
         text-align: center;
         aspect-ratio: 1 / 1;
         border-radius: 100%;
-        cursor: pointer;
         color: #252b33;
-        &.is-past,
-        &.is-future {
-            color: #999;
-        }
+    }
+}
+
+.days {
+    .day {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.04);
+        color: #999;
         &.is-this-month {
+            background-color: rgba(0, 0, 0, 0.08);
             color: #252b33;
         }
         &.is-today {
-            background: #f1341c;
+            color: #e4523f;
+            &.active {
+                background: #e4523f;
+                color: #fff;
+            }
+        }
+        &.active {
+            background: #0096ff;
             color: #fff;
         }
         &:hover {
