@@ -73,10 +73,17 @@ const onSwitchMonth = (value: number) => {
 
 const onReset = () => {
     const value = dayjs().format('YYYY-MM-DD');
+
+    year.value = dayjs(value).year();
+    month.value = dayjs(value).month() + 1;
+
     emits('update:modelValue', value);
 };
 
 const onPick = (value: string) => {
+    year.value = dayjs(value).year();
+    month.value = dayjs(value).month() + 1;
+
     emits('update:modelValue', value);
     emits('pick', value);
 };
@@ -85,18 +92,12 @@ const onPick = (value: string) => {
 <template>
     <PickerLayout
         :resetButtonText="'今天'"
+        :switchViewButtonText="`${year}年${month}月`"
         @prev="onSwitchMonth(-1)"
         @next="onSwitchMonth(1)"
         @reset="onReset"
+        @switch:view="onSwitchView"
     >
-        <template v-slot:headerText>
-            <div
-                class="cc-cursor-pointer cc-inline-block hover:cc-bg-gray-200 hover:cc-rounded"
-                @click="onSwitchView"
-            >
-                {{ `${year}年${month}月` }}
-            </div>
-        </template>
         <template v-slot:default>
             <div class="weekday">
                 <template v-for="weekday in weekdays">
@@ -163,20 +164,23 @@ const onPick = (value: string) => {
             background-color: rgba(0, 0, 0, 0.08);
             color: #252b33;
         }
-        &.is-today {
-            color: #e4523f;
-            &.active {
-                background: #e4523f;
-                color: #fff;
-            }
+        &:hover {
+            background-color: #0096ff;
+            color: #fff;
         }
         &.active {
-            background: #0096ff;
+            background-color: #0096ff;
             color: #fff;
+            &:hover {
+                background-color: darken(#0096ff, 10%);
+            }
         }
-        &:hover {
-            background: #0096ff;
+        &.is-today {
+            background-color: #e4523f;
             color: #fff;
+            &:hover {
+                background-color: darken(#e4523f, 10%);
+            }
         }
         &.disabled {
             color: #999;

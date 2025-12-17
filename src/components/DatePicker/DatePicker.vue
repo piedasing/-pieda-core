@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, useTemplateRef, onMounted, useModel } from 'vue';
+import { ref, computed, useTemplateRef, useModel } from 'vue';
 import dayjs from 'dayjs';
+
+import { vClickOutside } from '@/directives/clickOutside';
 
 import DateView from './Picker/DateView.vue';
 import MonthView from './Picker/MonthView.vue';
+import YearView from './Picker/YearView.vue';
 
 type TViewMode = 'year' | 'month' | 'day';
 type TEnumViewMode = {
@@ -48,10 +51,6 @@ const pickerStyle: { [x: string]: any } = ref({
     left: '0',
 });
 
-const year = ref(dayjs().year());
-const month = ref(dayjs().month() + 1);
-const date = ref(dayjs().date());
-
 const formattedValue = computed(() => {
     const dateObj = dayjs(props.modelValue);
     if (!dateObj.isValid()) {
@@ -64,6 +63,8 @@ const onTogglePicker = () => {
     isPickerShown.value = !isPickerShown.value;
 
     if (isPickerShown.value) {
+        view.value = ENUM_VIEW_MODE.DAY;
+
         if (!wrapperRef.value) {
             return;
         }
@@ -76,27 +77,17 @@ const onTogglePicker = () => {
             pickerStyle.value.top = '100%';
             pickerStyle.value.bottom = 'unset';
         }
-
-        setValues();
     }
-};
-
-const setValues = () => {
-    const dateObj = dayjs(props.modelValue);
-    if (dateObj.isValid()) {
-        year.value = dateObj.year();
-        month.value = dateObj.month() + 1;
-        date.value = dateObj.date();
-        return;
-    }
-    year.value = dayjs().year();
-    month.value = dayjs().month() + 1;
-    date.value = dayjs().date();
 };
 
 const onSwitchView = (value: TViewMode) => {
-    console.log(value);
     view.value = value;
+};
+
+const onYearPicked = (value: string) => {
+    emits('update:modelValue', value);
+
+    view.value = ENUM_VIEW_MODE.MONTH;
 };
 
 const onMonthPicked = (value: string) => {
@@ -114,13 +105,13 @@ const onDatePicked = (value: string) => {
     }
 };
 
-onMounted(() => {
-    setValues();
-});
+const onClickOutside = () => {
+    isPickerShown.value = false;
+};
 </script>
 
 <template>
-    <div class="datepicker" ref="wrapperRef">
+    <div class="datepicker" ref="wrapperRef" v-click-outside="onClickOutside">
         <slot
             name="default"
             v-bind="{ inputValue: formattedValue, isPickerShown, onTogglePicker }"
@@ -132,21 +123,23 @@ onMounted(() => {
                 v-if="isPickerShown"
                 :style="pickerStyle"
             >
-                <template v-if="view === ENUM_VIEW_MODE.DAY">
-                    <DateView
-                        v-model="val"
-                        @switch:view="onSwitchView(ENUM_VIEW_MODE.MONTH)"
-                        @pick="onDatePicked"
-                    ></DateView>
-                </template>
-                <template v-else-if="view === ENUM_VIEW_MODE.MONTH">
-                    <MonthView
-                        :modelValue="modelValue"
-                        @switch:view="onSwitchView(ENUM_VIEW_MODE.YEAR)"
-                        @pick="onMonthPicked"
-                    ></MonthView>
-                </template>
-                <template v-else-if="view === ENUM_VIEW_MODE.YEAR"> 123 </template>
+                <DateView
+                    v-show="view === ENUM_VIEW_MODE.DAY"
+                    v-model="val"
+                    @switch:view="onSwitchView(ENUM_VIEW_MODE.MONTH)"
+                    @pick="onDatePicked"
+                ></DateView>
+                <MonthView
+                    v-show="view === ENUM_VIEW_MODE.MONTH"
+                    :modelValue="modelValue"
+                    @switch:view="onSwitchView(ENUM_VIEW_MODE.YEAR)"
+                    @pick="onMonthPicked"
+                ></MonthView>
+                <YearView
+                    v-show="view === ENUM_VIEW_MODE.YEAR"
+                    :modelValue="modelValue"
+                    @pick="onYearPicked"
+                ></YearView>
             </div>
         </transition>
     </div>
