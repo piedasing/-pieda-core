@@ -1,94 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import DatePicker from '@/components/DatePicker.vue';
+import DatePicker from '@/components/DatePicker/DatePicker.vue';
 
-const datetime = ref('2024-01-01 08:00:00');
+const date = ref('2025-01-01');
+const datetime = ref('2025-01-01 08:00:00');
 const datetimeRange = ref({
-    start: '2024-01-01 08:00:00',
-    end: '2024-01-01 08:00:00',
+    start: '2025-01-01 08:00:00',
+    end: '2025-01-01 08:00:00',
 });
 </script>
 
 <template>
     <div class="cc-mb-4">
-        date:
-        <DatePicker
-            v-model:value="datetime"
-            :mode="'date'"
-            :color="'pink'"
-            :placeholder="'請選擇日期'"
-        >
-            <template v-slot="{ inputValue, togglePopover }">
-                <div class="box">
-                    <input type="text" :value="inputValue" />
-                    <button @click="togglePopover">
-                        <img class="icon" src="../../assets/calendar.png" />
-                    </button>
-                </div>
-            </template>
-        </DatePicker>
-    </div>
-    <div class="cc-mb-4">
-        datetime:
-        <DatePicker
-            v-model:value="datetime"
-            :mode="'dateTime'"
-            :color="'pink'"
-            :placeholder="'請選擇日期'"
-        >
-            <template v-slot="{ inputValue, togglePopover }">
-                <div class="box">
-                    <input type="text" :value="inputValue" />
-                    <button @click="togglePopover">
-                        <img class="icon" src="../../assets/calendar.png" />
-                    </button>
-                </div>
-            </template>
-        </DatePicker>
-    </div>
-    <div class="cc-mb-4">
-        time:
-        <DatePicker
-            v-model:value="datetime"
-            :mode="'time'"
-            :color="'pink'"
-            :placeholder="'請選擇日期'"
-        >
-            <template v-slot="{ inputValue, togglePopover }">
-                <div class="box">
-                    <input type="text" :value="inputValue" />
-                    <button @click="togglePopover">
-                        <img class="icon" src="../../assets/calendar.png" />
-                    </button>
-                </div>
-            </template>
-        </DatePicker>
-    </div>
-    <div class="cc-mb-4">
-        datetime range:
-
-        <!-- <v-date-picker v-model.range="datetime" :mode="'dateTime'"></v-date-picker> -->
-        <DatePicker
-            v-model:value="datetimeRange"
-            :mode="'dateTimeRange'"
-            :showMonthRows="2"
-            :color="'pink'"
-            :placeholder="'請選擇日期'"
-        >
-            <template v-slot="{ inputValue, togglePopover, inputEvents }">
-                <div class="box">
-                    <input
-                        type="text"
-                        :value="inputValue.start"
-                        v-on="inputEvents.start"
-                        @change="() => togglePopover()"
-                    />
-                    -
-                    <input type="text" :value="inputValue.end" v-on="inputEvents.end" />
-                    <button @click="() => togglePopover()">
-                        <img class="icon" src="../../assets/calendar.png" />
-                    </button>
+        <DatePicker v-model="date" :mode="'date'" :autoHideMenu="false">
+            <template v-slot:default="{ inputValue, isPickerShown, onTogglePicker }">
+                <div class="">
+                    <input type="text" readonly :value="inputValue" />
+                    <button @click="onTogglePicker">{{ isPickerShown ? '隱藏' : '顯示' }}</button>
                 </div>
             </template>
         </DatePicker>
